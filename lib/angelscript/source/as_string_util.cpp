@@ -33,7 +33,7 @@
 
 #include <string.h>     // some compilers declare memcpy() here
 #include <math.h>       // pow()
-#include <stdint.h>     // UINT64_MAX
+#include <limits>       // std::numeric_limits<uint64_t>::max()
 
 #if !defined(AS_NO_MEMORY_H)
 #include <memory.h>
@@ -186,7 +186,7 @@ asQWORD asStringScanUInt64(const char *string, int base, size_t *numScanned, boo
 	{
 		while( *end >= '0' && *end <= '9' )
 		{
-			if( overflow && ((res > UINT64_MAX / 10) || ((asUINT(*end - '0') > (UINT64_MAX - (UINT64_MAX / 10) * 10)) && res == UINT64_MAX / 10)) )
+			if( overflow && ((res > std::numeric_limits<uint64_t>::max() / 10) || ((asUINT(*end - '0') > (std::numeric_limits<uint64_t>::max() - (std::numeric_limits<uint64_t>::max() / 10) * 10)) && res == std::numeric_limits<uint64_t>::max() / 10)) )
 				*overflow = true;
 			res *= 10;
 			res += *end++ - '0';
@@ -213,7 +213,7 @@ asQWORD asStringScanUInt64(const char *string, int base, size_t *numScanned, boo
 		{
 			for (int nbr; (nbr = asCharToNbr(*end, base)) >= 0; end++)
 			{
-				if (overflow && ((res > UINT64_MAX / base) || ((asUINT(nbr) > (UINT64_MAX - (UINT64_MAX / base) * base)) && res == UINT64_MAX / base)) )
+				if (overflow && ((res > std::numeric_limits<uint64_t>::max() / base) || ((asUINT(nbr) > (std::numeric_limits<uint64_t>::max() - (std::numeric_limits<uint64_t>::max() / base) * base)) && res == std::numeric_limits<uint64_t>::max() / base)) )
 					*overflow = true;
 
 				res = res * base + nbr;
