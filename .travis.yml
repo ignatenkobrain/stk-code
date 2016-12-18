@@ -21,6 +21,9 @@ env:
 
 addons:
   apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    - llvm-toolchain-precise-3.7
     packages:
     - build-essential
     - cmake
@@ -38,14 +41,20 @@ addons:
     - mesa-common-dev
     - pkg-config
     - zlib1g-dev
+    - g++-5
+    - clang-3.7
 
 before_script:
   # Unfortunately using all threads crashes g++: "g++: internal compiler error: Killed (program cc1plus)"
   # Use half of the available threads, gcc is memory hungry
   - 'if [ ${CC} = "gcc" ]; then
         export THREADS=$((`nproc` / 2));
+        export CC=gcc-5;
+        export CXX=g++-5;
     else
         export THREADS=$((`nproc` + 1));
+        export CC=clang-3.7;
+        export CXX=clang++-3.7;
     fi'
   - echo "THREADS = $THREADS"
   - free -mt
